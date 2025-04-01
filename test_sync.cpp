@@ -15,7 +15,6 @@ Description:
 #include <cstring>
 #include <vector>
 
-// Include the header file containing the declarations from sync.cpp
 // Since we're in a separate test file, we need this to know the
 // structure of SharedMemory, IntersectionData, and the function prototypes.
 #include "sync.h"
