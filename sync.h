@@ -1,4 +1,3 @@
-// sync.h
 #ifndef SYNC_H
 #define SYNC_H
 
@@ -55,5 +54,4 @@ void handle_acquire_request(int train_id, const std::string& intersection_name, 
 // Function to handle RELEASE request from a train
 void handle_release_request(int train_id, const std::string& intersection_name, SharedMemory* shm);
 
-#endif // SYNC_H
-// sync.cpp
+#endif 
