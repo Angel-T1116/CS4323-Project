@@ -1,3 +1,10 @@
+/*
+Author: Samuel Shankle
+Email: samuel.shankle@okstate.edu
+Date: 04/01/2025
+Description:
+*/
+
 #include <iostream>
 #include <cassert>
 #include <sys/ipc.h>
