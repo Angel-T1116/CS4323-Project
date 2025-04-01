@@ -2,8 +2,7 @@
 Author: Samuel Shankle
 Email: samuel.shankle@okstate.edu
 Date: 04/01/2025
-Description: This program is a template for the train intersection problem. 
-             It demonstrates how to use shared memory, semaphores, and mutexes to coordinate access to shared resources.
+Description: 
 */
 
 #include "sync.h"
@@ -142,93 +141,4 @@ void handle_release_request(int train_id, const std::string& intersection_name, 
     }
 
     pthread_mutex_unlock(&shm->shared_memory_mutex); // Unlock shared memory
-}
-
-int main() {
-    // Create shared memory segment
-    int shmid = shmget(SHM_KEY, sizeof(SharedMemory), IPC_CREAT | 0666);
-    if (shmid < 0) {
-        perror("shmget");
-        return 1;
-    }
-
-    // Attach shared memory
-    SharedMemory* shm = static_cast<SharedMemory*>(shmat(shmid, nullptr, 0));
-    if (shm == reinterpret_cast<SharedMemory*>(-1)) {
-        perror("shmat");
-        return 1;
-    }
-
-    // Initialize shared memory (only necessary for the parent process initially)
-    bool is_parent = true; // Replace with actual parent check
-
-    if (is_parent) {
-        new (shm) SharedMemory(); // Placement new to initialize in shared memory
-        // Initialize intersection data based on your intersections.txt
-        // Example initialization:
-        strncpy(shm->intersections[0].name, "IntersectionA", sizeof(shm->intersections[0].name) - 1);
-        shm->intersections[0].capacity = 1;
-        shm->intersections[0].lock_type = 1;
-        sem_init(&shm->intersections[0].semaphore, 1, shm->intersections[0].capacity);
-
-        strncpy(shm->intersections[1].name, "IntersectionB", sizeof(shm->intersections[1].name) - 1);
-        shm->intersections[1].capacity = 2;
-        shm->intersections[1].lock_type = 2;
-        sem_init(&shm->intersections[1].semaphore, 1, shm->intersections[1].capacity);
-    }
-
-    // Example usage (simulating train actions):
-    int train1_id = 1;
-    int train2_id = 2;
-
-    // Train 1 tries to acquire IntersectionA
-    handle_acquire_request(train1_id, "IntersectionA", shm);
-    sleep(1);
-
-    // Train 2 tries to acquire IntersectionA
-    handle_acquire_request(train2_id, "IntersectionA", shm);
-    sleep(1);
-
-    // Train 1 releases IntersectionA
-    handle_release_request(train1_id, "IntersectionA", shm);
-    sleep(1);
-
-    // Train 2 tries to acquire IntersectionA again (should succeed)
-    handle_acquire_request(train2_id, "IntersectionA", shm);
-    sleep(1);
-
-    // Train 1 tries to acquire IntersectionB
-    handle_acquire_request(train1_id, "IntersectionB", shm);
-    sleep(1);
-
-    // Train 2 tries to acquire IntersectionB
-    handle_acquire_request(train2_id, "IntersectionB", shm);
-    sleep(1);
-
-    // Train 3 tries to acquire IntersectionB
-    handle_acquire_request(3, "IntersectionB", shm); // Should wait
-
-    // Train 1 releases IntersectionB
-    handle_release_request(train1_id, "IntersectionB", shm);
-    sleep(1);
-
-    // Train 2 releases IntersectionB
-    handle_release_request(train2_id, "IntersectionB", shm);
-    sleep(1);
-
-    // Detach shared memory
-    if (shmdt(shm) == -1) {
-        perror("shmdt");
-        return 1;
-    }
-
-    // Optionally remove shared memory (usually done by the parent after all processes finish)
-    if (is_parent) {
-        if (shmctl(shmid, IPC_RMID, nullptr) == -1) {
-            perror("shmctl");
-            return 1;
-        }
-    }
-
-    return 0;
 }
