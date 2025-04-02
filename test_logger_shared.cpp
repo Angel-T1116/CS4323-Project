@@ -10,6 +10,8 @@
 #define SHM_KEY_TIME 0x1234
 #define SHM_KEY_MUTEX 0x5678
 
+void fork_trains();
+
 int main() {
     // Creates shared memory for sim_time
     int shmid_time = shmget(SHM_KEY_TIME, sizeof(int), IPC_CREAT | 0666);
