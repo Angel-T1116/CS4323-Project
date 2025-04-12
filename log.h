@@ -1,3 +1,8 @@
+// Group : I
+// Author: Angel Trujillo
+// Date: 04/01/2025
+// Description: Declares the Logger class for time-stamped logging of server and train events with mutex-based time tracking.
+
 #ifndef LOG_H
 #define LOG_H
 

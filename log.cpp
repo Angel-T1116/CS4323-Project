@@ -1,3 +1,8 @@
+// Group : I
+// Author: Angel Trujillo
+// Date: 04/01/2025
+// Description: Implements the Logger class. Provides synchronized logging with formatted timestamps and PID tagging.
+
 #include "log.h"
 #include <iomanip>
 #include <sstream>
@@ -19,6 +24,7 @@ Logger::~Logger() {
     }
 }
 
+// Increments simulation time with mutex lock and returns the new time
 int Logger::increment_sim_time() {
     pthread_mutex_lock(time_mutex);
     (*sim_time)++;
@@ -27,6 +33,7 @@ int Logger::increment_sim_time() {
     return current_time;
 }
 
+// Formats an integer number of seconds into HH:MM:SS format
 std::string Logger::format_time(int seconds) {
     int hours = seconds / 3600;
     int minutes = (seconds % 3600) / 60;
@@ -39,6 +46,7 @@ std::string Logger::format_time(int seconds) {
     return oss.str();
 }
 
+// Logs a message with time, optional PID, and source tag
 void Logger::log(const std::string& source, const std::string& message) {
     int time_now = increment_sim_time();
     std::string timestamp = format_time(time_now);
