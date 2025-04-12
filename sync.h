@@ -1,9 +1,8 @@
-/*
-Author: Samuel Shankle
-Email: samuel.shankle@okstate.edu
-Date: 04/01/2025
-Description:
-*/
+// Group : I
+// Author: Samuel Shankle
+// Email: samuel.shankle@okstate.edu
+// Date: 04/01/2025
+// Description: Declares shared memory structures and synchronization functions for intersection access using mutexes and semaphores.
 
 #ifndef SYNC_H
 #define SYNC_H

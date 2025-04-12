@@ -1,9 +1,8 @@
-/*
-Author: Samuel Shankle
-Email: samuel.shankle@okstate.edu
-Date: 04/01/2025
-Description: 
-*/
+// Group : I
+// Author: Samuel Shankle
+// Email: samuel.shankle@okstate.edu
+// Date: 04/01/2025
+// Description: Implements acquire and release logic for intersections using synchronization primitives stored in shared memory.
 
 #include "sync.h"
 

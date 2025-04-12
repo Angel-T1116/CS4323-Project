@@ -1,0 +1,49 @@
+[00:00:01] [PID 539411] SERVER: Initialized intersections
+[00:00:02] [PID 539413] TRAIN1: Sent ACQUIRE for IntersectionA
+[00:00:04] [PID 539413] TRAIN1: Granted IntersectionA
+[00:00:03] [PID 539412] SERVER: Received request from Train1: acquire
+[00:00:06] [PID 539412] SERVER: Granted IntersectionA to Train1
+[00:00:05] [PID 539414] TRAIN2: Sent ACQUIRE for IntersectionB
+[00:00:08] [PID 539412] SERVER: Received request from Train2: acquire
+[00:00:09] [PID 539414] TRAIN2: Granted IntersectionB
+[00:00:10] [PID 539412] SERVER: Granted IntersectionB to Train2
+[00:00:11] [PID 539412] SERVER: Received request from Train3: acquire
+[00:00:12] [PID 539412] SERVER: Granted IntersectionC to Train3
+[00:00:13] [PID 539412] SERVER: Received request from Train4: acquire
+[00:00:15] [PID 539412] SERVER: Granted IntersectionE to Train4
+[00:00:07] [PID 539415] TRAIN3: Sent ACQUIRE for IntersectionC
+[00:00:16] [PID 539415] TRAIN3: Granted IntersectionC
+[00:00:14] [PID 539416] TRAIN4: Sent ACQUIRE for IntersectionE
+[00:00:17] [PID 539416] TRAIN4: Granted IntersectionE
+[00:00:18] [PID 539413] TRAIN1: Sent RELEASE for IntersectionA
+[00:00:19] [PID 539413] TRAIN1: Sent ACQUIRE for IntersectionB
+[00:00:20] [PID 539413] TRAIN1: Granted IntersectionB
+[00:00:21] [PID 539414] TRAIN2: Sent RELEASE for IntersectionB
+[00:00:22] [PID 539414] TRAIN2: Sent ACQUIRE for IntersectionD
+[00:00:23] [PID 539414] TRAIN2: Granted IntersectionD
+[00:00:24] [PID 539415] TRAIN3: Sent RELEASE for IntersectionC
+[00:00:25] [PID 539415] TRAIN3: Sent ACQUIRE for IntersectionD
+[00:00:26] [PID 539415] TRAIN3: Granted IntersectionD
+[00:00:27] [PID 539416] TRAIN4: Sent RELEASE for IntersectionE
+[00:00:28] [PID 539416] TRAIN4: Sent ACQUIRE for IntersectionB
+[00:00:29] [PID 539416] TRAIN4: Granted IntersectionB
+[00:00:30] [PID 539413] TRAIN1: Sent RELEASE for IntersectionB
+[00:00:31] [PID 539413] TRAIN1: Sent ACQUIRE for IntersectionC
+[00:00:32] [PID 539413] TRAIN1: Granted IntersectionC
+[00:00:33] [PID 539414] TRAIN2: Sent RELEASE for IntersectionD
+[00:00:34] [PID 539414] TRAIN2: Sent ACQUIRE for IntersectionE
+[00:00:35] [PID 539414] TRAIN2: Granted IntersectionE
+[00:00:36] [PID 539415] TRAIN3: Sent RELEASE for IntersectionD
+[00:00:37] [PID 539415] TRAIN3: Sent ACQUIRE for IntersectionA
+[00:00:38] [PID 539415] TRAIN3: Granted IntersectionA
+[00:00:39] [PID 539416] TRAIN4: Sent RELEASE for IntersectionB
+[00:00:40] [PID 539416] TRAIN4: Sent ACQUIRE for IntersectionD
+[00:00:41] [PID 539416] TRAIN4: Granted IntersectionD
+[00:00:42] [PID 539413] TRAIN1: Sent RELEASE for IntersectionC
+[00:00:43] [PID 539413] TRAIN1: Completed route.
+[00:00:44] [PID 539414] TRAIN2: Sent RELEASE for IntersectionE
+[00:00:45] [PID 539414] TRAIN2: Completed route.
+[00:00:46] [PID 539415] TRAIN3: Sent RELEASE for IntersectionA
+[00:00:47] [PID 539415] TRAIN3: Completed route.
+[00:00:48] [PID 539416] TRAIN4: Sent RELEASE for IntersectionD
+[00:00:49] [PID 539416] TRAIN4: Completed route.
