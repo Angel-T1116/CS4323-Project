@@ -24,9 +24,11 @@
 // Define constants
 #define SHM_KEY 12345
 #define MAX_INTERSECTIONS 50
+#define MAX_TRAINS 100
 #define MAX_TRAINS_AT_INTERSECTION 10
 #define MAX_TRAIN_NAME_LENGTH 50
 #define MAX_INTERSECTION_NAME_LENGTH 50
+#define MAX_RESOURCES MAX_INTERSECTIONS
 
 // Structure to hold intersection data in shared memory
 struct IntersectionData {

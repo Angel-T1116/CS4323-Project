@@ -5,6 +5,12 @@
 // Description: Implements acquire and release logic for intersections using synchronization primitives stored in shared memory.
 
 #include "sync.h"
+#include "detect_deadlock.h"
+
+// Deadlock detection data structures
+std::vector<std::vector<int>> allocation(MAX_TRAINS, std::vector<int>(MAX_RESOURCES, 0));
+std::vector<std::vector<int>> request(MAX_TRAINS, std::vector<int>(MAX_RESOURCES, 0));
+std::vector<int> available(MAX_RESOURCES, 1); // 1 means intersection is free, 0 means fully occupied
 
 IntersectionData::IntersectionData() : capacity(0), lock_type(0), num_holding_trains(0) {
     pthread_mutex_init(&mutex, nullptr);
@@ -53,6 +59,7 @@ void handle_acquire_request(int train_id, const std::string& intersection_name, 
     IntersectionData* intersection = &shm->intersections[intersection_index];
 
     if (intersection->lock_type == 1) { // Mutex
+        request[train_id][intersection_index] = 1;
         // Check if the mutex is locked
         bool is_locked = false;
         for (int i = 0; i < intersection->num_holding_trains; ++i) {
@@ -63,16 +70,25 @@ void handle_acquire_request(int train_id, const std::string& intersection_name, 
             }
         }
         if (!is_locked && intersection->num_holding_trains == 0) {
+            allocation[train_id][intersection_index] = 1;
+            request[train_id][intersection_index] = 0;
+            available[intersection_index] = 0;
             pthread_mutex_lock(&intersection->mutex);
             intersection->holding_trains[0] = train_id;
             intersection->num_holding_trains = 1;
             std::cout << "Train " << train_id << " acquired mutex for " << intersection_name << std::endl;
             // Send GRANT message to train (implementation depends on IPC)
         } else {
+            bool deadlock = detect_deadlock(allocation, request, available);
+            if (deadlock) {
+                std::cerr << "Deadlock detected involving train " << train_id << " at intersection " << intersection_name << std::endl;
+                // Optional: Take recovery actions here
+            }
             std::cout << "Train " << train_id << " waiting for mutex on " << intersection_name << std::endl;
             // Send WAIT message to train (implementation depends on IPC)
         }
     } else { // Semaphore
+        request[train_id][intersection_index] = 1;
         // Check if there are available slots
         bool already_holding = false;
         for (int i = 0; i < intersection->num_holding_trains; ++i) {
@@ -83,11 +99,19 @@ void handle_acquire_request(int train_id, const std::string& intersection_name, 
             }
         }
         if (!already_holding && intersection->num_holding_trains < intersection->capacity) {
+            allocation[train_id][intersection_index] = 1;
+            request[train_id][intersection_index] = 0;
+            available[intersection_index] = 0;
             sem_wait(&intersection->semaphore); // Decrement semaphore
             intersection->holding_trains[intersection->num_holding_trains++] = train_id;
             std::cout << "Train " << train_id << " acquired semaphore for " << intersection_name << std::endl;
             // Send GRANT message to train (implementation depends on IPC)
         } else {
+            bool deadlock = detect_deadlock(allocation, request, available);
+            if (deadlock) {
+                std::cerr << "Deadlock detected involving train " << train_id << " at intersection " << intersection_name << std::endl;
+                // Optional: Take recovery actions here
+            }
             std::cout << "Train " << train_id << " waiting for semaphore on " << intersection_name << std::endl;
             // Send WAIT message to train (implementation depends on IPC)
         }
@@ -112,6 +136,8 @@ void handle_release_request(int train_id, const std::string& intersection_name, 
 
     if (intersection->lock_type == 1) { // Mutex
         if (intersection->num_holding_trains == 1 && intersection->holding_trains[0] == train_id) {
+            allocation[train_id][intersection_index] = 0;
+            available[intersection_index] = 1;
             pthread_mutex_unlock(&intersection->mutex);
             intersection->num_holding_trains = 0;
             memset(intersection->holding_trains, 0, sizeof(intersection->holding_trains));
@@ -121,6 +147,8 @@ void handle_release_request(int train_id, const std::string& intersection_name, 
             std::cerr << "Error: Train " << train_id << " does not hold mutex for " << intersection_name << std::endl;
         }
     } else { // Semaphore
+        allocation[train_id][intersection_index] = 0;
+        available[intersection_index] = 1;
         for (int i = 0; i < intersection->num_holding_trains; ++i) {
             if (intersection->holding_trains[i] == train_id) {
                 // Remove train_id from holding_trains
