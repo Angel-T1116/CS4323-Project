@@ -1,60 +1,56 @@
-// Group : I
+// Group: I
 // Author: Wyatt Probst
-// Date: 04/01/2025
-// Description: Implements ACQUIRE/RELEASE and GRANT/WAIT/DENY message handling
+// Date: 04/20/2025
+// Description: Implements ACQUIRE/RELEASE message passing to and from server and train. Has placeholders in place to test that
+// should be replaced with calls to the other files.
 
 #include <iostream>
-#include <cstring>
+#include <unistd.h>
 #include <sys/ipc.h>
 #include <sys/msg.h>
-#include <unistd.h>
-#include <stdlib.h>
+#include <string>
 
 using namespace std;
 
-struct TrainMessage {
-    long type; //1=request, 2=response
-    int train_id;         
-    char command[7]; //acquire or release
-};
+struct TrainData {
+    long type; //1 for request and 2 for response
+    int id; //train number
+    string message; //Acquire or release message
+}; 
 
-#define MSGKEY 1234  
+key_t key = 1; //update key if needed
+int messageQueue = msgget(key, 0666 | IPC_CREAT);  //creates message queue 
 
 void server() {
-    int msgid = msgget(MSGKEY, IPC_CREAT | 0666); //Permissions may need to be adjusted
-
-    TrainMessage message;
-
+    TrainData data;
+    
     while (true) {
-        //Replace test output with calls to logging function
-        msgrcv(msgid, &message, sizeof(message) - sizeof(long), 1, 0);
-        cout << "Server received request from Train " << message.train_id << ": " << message.command << endl;
-
-        message.type = 2; 
-        strcpy(message.command, "granted");
+        msgrcv(messageQueue, &data, sizeof(data), 1, 0); //waits to receive messages from trains with while(true)
+        cout << "Request received " << data.id << " received request" << endl; //test messages to be replaced with logging function
         
-        msgsnd(msgid, &message, sizeof(message) - sizeof(long), 0);
-        cout << "Server granted access to Train " << message.train_id << endl;
+        data.type = 2; 
+        data.message = "release";
+        
+        msgsnd(messageQueue, &data, sizeof(data), 0); // sends messages back to trains to grant or deny
+        cout << "Request received " << data.id << " granted or denied access" << endl; //need to implement synchronization
     }
 }
 
-void train(int train_id) {
-    int msgid = msgget(MSGKEY, 0666);
-
-    TrainMessage message;
-    message.train_id = train_id;
-    message.type = 1; 
-    strcpy(message.command, "acquire"); 
-
-    msgsnd(msgid, &message, sizeof(message) - sizeof(long), 0);
-    cout << "Train " << train_id << " sent request: " << message.command << endl;
-
-    msgrcv(msgid, &message, sizeof(message) - sizeof(long), 2, 0);
-    cout << "Train " << train_id << " received response: " << message.command << endl;
+void train(int id) {
+    TrainData data;
+    data.id = id;
+    data.type = 1;
+    data.message = "acquire";
+    
+    msgsnd(messageQueue, &data, sizeof(data), 0); //sends messages to server
+    cout << "Train " << id << " sent request" << endl;
+    
+    msgrcv(messageQueue, &data, sizeof(data), 2, 0); //receives message from server
+    cout << "Train " << id << " received message" << endl;
 }
 
-int main() {
-    //Replace this part with forking logic
+int main() { //main for testing
+    //Replace this with forking logic
     pid_t pid = fork();
 
     if (pid == 0) {
@@ -62,13 +58,12 @@ int main() {
     } 
     //Pass in parsing output
     else {
-        sleep(3);  //Adjust sleep times as necessary
+        //sleep(3);  //Adjust sleep times as necessary
         train(1);
-        sleep(2);
-        train(2);
-        sleep(2);
-        train(3);
+        //sleep(2);  //Without the sleep the server may not print on csx server
+        //train(2);
+        //sleep(2);
+        //train(99999);
     }
-
     return 0;
 }
