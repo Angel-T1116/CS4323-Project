@@ -28,7 +28,7 @@ void server() {
         msgrcv(messageQueue, &data, sizeof(data), 1, 0); //waits to receive messages from trains with while(true)
         cout << "Request received " << data.id << " received request" << endl; //test messages to be replaced with logging function
         
-        data.type = 2; 
+        data.type = 2; //changes type to response before giving response
         data.message = "release";
         
         msgsnd(messageQueue, &data, sizeof(data), 0); // sends messages back to trains to grant or deny
@@ -39,7 +39,7 @@ void server() {
 void train(int id) {
     TrainData data;
     data.id = id;
-    data.type = 1;
+    data.type = 1; //changes type to request before requesting
     data.message = "acquire";
     
     msgsnd(messageQueue, &data, sizeof(data), 0); //sends messages to server
@@ -53,7 +53,7 @@ int main() { //main for testing
     //Replace this with forking logic
     pid_t pid = fork();
 
-    if (pid == 0) {
+    if (pid == 0) { //creates 1 instance of the server to listen for trains
         server();
     } 
     //Pass in parsing output
@@ -63,7 +63,7 @@ int main() { //main for testing
         //sleep(2);  //Without the sleep the server may not print on csx server
         //train(2);
         //sleep(2);
-        //train(99999);
+        //train(99999); //tried testing edge cases like lots of trains or large id
     }
     return 0;
 }
