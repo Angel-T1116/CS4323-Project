@@ -1,0 +1,29 @@
+[00:00:01] [PID 2271307] SERVER: Initialized intersections
+[00:00:02] [PID 2271308] SERVER: Received request from Train1: acquire
+[00:00:03] [PID 2271308] SERVER: Deadlock check triggered
+[00:00:04] [PID 2271308] SERVER: Granted IntersectionA to Train1
+[00:00:05] [PID 2271308] SERVER: Received request from Train2: acquire
+[00:00:06] [PID 2271308] SERVER: Deadlock check triggered
+[00:00:07] [PID 2271308] SERVER: Granted IntersectionB to Train2
+[00:00:08] [PID 2271308] SERVER: Received request from Train1: acquire
+[00:00:09] [PID 2271308] SERVER: Deadlock check triggered
+[00:00:11] [PID 2271308] SERVER: Deadlock detected.
+[00:00:12] [PID 2271308] SERVER: Recovering from deadlock: Terminating Train1
+[00:00:13] [PID 2271308] SERVER: Force-releasing IntersectionA from Train1
+[00:00:14] [PID 2271308] SERVER: Train1 released all locks.
+[00:00:15] [PID 2271308] SERVER: Shutdown command received. Exiting server.
+[00:00:10] [PID 2271309] TRAIN1: Sent ACQUIRE for IntersectionA
+[00:00:16] [PID 2271309] TRAIN1: Granted IntersectionA
+[00:00:17] [PID 2271310] TRAIN2: Sent ACQUIRE for IntersectionB
+[00:00:18] [PID 2271310] TRAIN2: Granted IntersectionB
+[00:00:19] [PID 2271307] SERVER: Simulation complete.
+[00:00:20] [PID 2271309] TRAIN1: Sent ACQUIRE for IntersectionB
+[00:00:21] [PID 2271309] TRAIN1: Granted IntersectionB
+[00:00:22] [PID 2271309] TRAIN1: Sent RELEASE for IntersectionA
+[00:00:23] [PID 2271309] TRAIN1: Sent RELEASE for IntersectionB
+[00:00:24] [PID 2271309] TRAIN1: Completed route.
+[00:00:25] [PID 2271310] TRAIN2: Sent ACQUIRE for IntersectionA
+[00:00:26] [PID 2271310] TRAIN2: Granted IntersectionA
+[00:00:27] [PID 2271310] TRAIN2: Sent RELEASE for IntersectionB
+[00:00:28] [PID 2271310] TRAIN2: Sent RELEASE for IntersectionA
+[00:00:29] [PID 2271310] TRAIN2: Completed route.

@@ -1,0 +1,9 @@
+#INTERSECTIONS
+IntersectionA:1
+IntersectionB:1
+IntersectionC:1
+IntersectionD:1
+IntersectionE:1
+IntersectionF:1
+IntersectionG:1
+IntersectionH:1

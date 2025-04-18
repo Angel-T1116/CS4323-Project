@@ -1,0 +1,9 @@
+#TRAINS
+Train1:IntersectionA,IntersectionB
+Train2:IntersectionB,IntersectionC
+Train3:IntersectionC,IntersectionD
+Train4:IntersectionD,IntersectionE
+Train5:IntersectionE,IntersectionF
+Train6:IntersectionF,IntersectionG
+Train7:IntersectionG,IntersectionH
+Train8:IntersectionH,IntersectionI
